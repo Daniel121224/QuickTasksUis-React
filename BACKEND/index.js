@@ -1,14 +1,17 @@
-const app = require('./app');
-const conectarDB = require('./src/conexDB/conn');
+var app = require('./app');
+var conectarDB = require('./src/conexDB/conn');
 
-const port = 4000;
+var port = 4000;
 
-// Conectar a la base de datos y luego iniciar el servidor
-const startServer = async () => {
-    await conectarDB();
-    app.listen(port, () => {
-        console.log(`Servidor corriendo en el puerto ${port}`);
-    });
-};
+async function startServer() {
+    try {
+        await conectarDB(); // Espera a que la conexión a la base de datos se realice correctamente
+        app.listen(port, () => {
+            console.log(`Servidor corriendo en el puerto ${port}`);
+        });
+    } catch (error) {
+        console.error('Error conectando a la base de datos:', error);
+    }
+}
 
 startServer();

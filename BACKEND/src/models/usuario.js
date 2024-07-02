@@ -8,4 +8,4 @@ var usuarioSchema = new Schema({
     contrasena: String,
 });
 
-module.export = mongoose.model('Usuario', usuarioSchema); // Exportar el modelo de usuario
+module.exports = mongoose.model('Usuario', usuarioSchema);
