@@ -15,7 +15,42 @@ async function saveUsuario(req, res){
     }
 }
 
+async function buscarUsuario(req, res){
+    var idUsuario = req.params.id;
+    try {
+        var result = await Usuario.findById(idUsuario).exec();
+        if (!result) {
+            res.status(404).send({message: "Usuario no encontrado"});
+        } else {
+            res.status(200).send({result});
+        }
+    } catch (err) {
+        res.status(500).send({message: "Error en la petición", error: err});
+    }
+}
+
+async function listarAllUsuario(req, res){
+    var idUsuario = req.params.idb;
+    try {
+        var result;
+        if(!idUsuario){
+            result = await Usuario.find({}).sort('nombre').exec();
+        } else {
+            result = await Usuario.find({_id: idUsuario}).sort('nombre').exec();
+        }
+        if (!result) {
+            res.status(404).send({message: "Usuarios no encontrados"});
+        } else {
+            res.status(200).send({result});
+        }
+    } catch (err) {
+        res.status(500).send({message: "Error en la petición", error: err});
+    }
+}
+
 module.exports = {
     prueba,
-    saveUsuario
+    saveUsuario,
+    buscarUsuario,
+    listarAllUsuario
 }
