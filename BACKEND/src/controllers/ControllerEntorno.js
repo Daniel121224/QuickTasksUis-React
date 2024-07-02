@@ -11,7 +11,7 @@ async function saveEntorno(req, res){
     }
 }
 
-async function buscarEntorno(req, res){
+async function findEntorno(req, res){
     var idEntorno = req.params.id;
     try {
         var result = await Entorno.findById(idEntorno).exec();
@@ -25,7 +25,7 @@ async function buscarEntorno(req, res){
     }
 }
 
-async function listarAllEntorno(req, res){
+async function findAllEntorno(req, res){
     var idEntorno = req.params.idb;
     try {
         var result;
@@ -44,8 +44,38 @@ async function listarAllEntorno(req, res){
     }
 }
 
+async function updateEntorno(req, res) {
+    var idEntorno = req.params.id;
+    try {
+        var updatedEntorno = await Entorno.findByIdAndUpdate(idEntorno, req.body, { new: true }).exec();
+        if (!updatedEntorno) {
+            res.status(404).send({ message: "Entorno no encontrado" });
+        } else {
+            res.status(200).send({ message: "Entorno actualizado con éxito", data: updatedEntorno });
+        }
+    } catch (err) {
+        res.status(500).send({ message: "Error al actualizar el entorno", error: err });
+    }
+}
+
+async function deleteEntorno(req, res) {
+    var idEntorno = req.params.id;
+    try {
+        var deletedEntorno = await Entorno.findByIdAndDelete(idEntorno).exec();
+        if (!deletedEntorno) {
+            res.status(404).send({ message: "Entorno no encontrado" });
+        } else {
+            res.status(200).send({ message: "Entorno eliminado con éxito", data: deletedEntorno });
+        }
+    } catch (err) {
+        res.status(500).send({ message: "Error al eliminar el entorno", error: err });
+    }
+}
+
 module.exports = {
     saveEntorno,
-    buscarEntorno,
-    listarAllEntorno
+    findEntorno,
+    findAllEntorno,
+    updateEntorno,
+    deleteEntorno
 }

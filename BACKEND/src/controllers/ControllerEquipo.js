@@ -11,7 +11,7 @@ async function saveEquipo(req, res){
     }
 }
 
-async function buscarEquipo(req, res){
+async function findEquipo(req, res){
     var idEquipo = req.params.id;
     try {
         var result = await Equipo.findById(idEquipo).exec();
@@ -25,7 +25,7 @@ async function buscarEquipo(req, res){
     }
 }
 
-async function listarAllEquipo(req, res){
+async function findAllEquipo(req, res){
     var idEquipo = req.params.idb;
     try {
         var result;
@@ -44,8 +44,38 @@ async function listarAllEquipo(req, res){
     }
 }
 
+async function updateEquipo(req, res) {
+    var idEquipo = req.params.id;
+    try {
+        var updatedEquipo = await Equipo.findByIdAndUpdate(idEquipo, req.body, { new: true }).exec();
+        if (!updatedEquipo) {
+            res.status(404).send({ message: "Equipo no encontrado" });
+        } else {
+            res.status(200).send({ message: "Equipo actualizado con éxito", data: updatedEquipo });
+        }
+    } catch (err) {
+        res.status(500).send({ message: "Error al actualizar el equipo", error: err });
+    }
+}
+
+async function deleteEquipo(req, res) {
+    var idEquipo = req.params.id;
+    try {
+        var deletedEquipo = await Equipo.findByIdAndDelete(idEquipo).exec();
+        if (!deletedEquipo) {
+            res.status(404).send({ message: "Equipo no encontrado" });
+        } else {
+            res.status(200).send({ message: "Equipo eliminado con éxito", data: deletedEquipo });
+        }
+    } catch (err) {
+        res.status(500).send({ message: "Error al eliminar el equipo", error: err });
+    }
+}
+
 module.exports = {
     saveEquipo,
-    buscarEquipo,
-    listarAllEquipo
+    findEquipo,
+    findAllEquipo,
+    updateEquipo,
+    deleteEquipo
 }

@@ -15,7 +15,7 @@ async function saveUsuario(req, res){
     }
 }
 
-async function buscarUsuario(req, res){
+async function findUsuario(req, res){
     var idUsuario = req.params.id;
     try {
         var result = await Usuario.findById(idUsuario).exec();
@@ -29,7 +29,7 @@ async function buscarUsuario(req, res){
     }
 }
 
-async function listarAllUsuario(req, res){
+async function findAllUsuario(req, res){
     var idUsuario = req.params.idb;
     try {
         var result;
@@ -48,9 +48,40 @@ async function listarAllUsuario(req, res){
     }
 }
 
+async function updateUsuario(req, res) {
+    var idUsuario = req.params.id;
+    try {
+        var updatedUsuario = await Usuario.findByIdAndUpdate(idUsuario, req.body, { new: true }).exec();
+        if (!updatedUsuario) {
+            res.status(404).send({message: "Usuario no encontrado"});
+        } else {
+            res.status(200).send({message: "Usuario actualizado con éxito", data: updatedUsuario});
+        }
+    } catch (err) {
+        res.status(500).send({message: "Error al actualizar el usuario", error: err});
+    }
+}
+
+async function deleteUsuario(req, res) {
+    var idUsuario = req.params.id;
+    try {
+        var deletedUsuario = await Usuario.findByIdAndDelete(idUsuario).exec();
+        if (!deletedUsuario) {
+            res.status(404).send({ message: "Usuario no encontrado" });
+        } else {
+            res.status(200).send({ message: "Usuario eliminado con éxito", data: deletedUsuario });
+        }
+    } catch (err) {
+        res.status(500).send({ message: "Error al eliminar el usuario", error: err });
+    }
+}
+
+
 module.exports = {
     prueba,
     saveUsuario,
-    buscarUsuario,
-    listarAllUsuario
+    findUsuario,
+    findAllUsuario,
+    updateUsuario,
+    deleteUsuario
 }

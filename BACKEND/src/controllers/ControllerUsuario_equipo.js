@@ -11,7 +11,7 @@ async function saveUsuario_equipo(req, res){
     }
 }
 
-async function buscarUsuario_equipo(req, res){
+async function findUsuario_equipo(req, res){
     var idUsuario_equipo = req.params.id;
     try {
         var result = await Usuario_equipo.findById(idUsuario_equipo).exec();
@@ -25,7 +25,7 @@ async function buscarUsuario_equipo(req, res){
     }
 }
 
-async function listarAllUsuario_equipo(req, res){
+async function findAllUsuario_equipo(req, res){
     var idUsuario_equipo = req.params.idb;
     try {
         var result;
@@ -44,8 +44,39 @@ async function listarAllUsuario_equipo(req, res){
     }
 }
 
+async function updateUsuario_equipo(req, res) {
+    var idUsuario_equipo = req.params.id;
+    try {
+        var updatedUsuario_equipo = await Usuario_equipo.findByIdAndUpdate(idUsuario_equipo, req.body, { new: true }).exec();
+        if (!updatedUsuario_equipo) {
+            res.status(404).send({ message: "Relación Usuario_equipo no encontrada" });
+        } else {
+            res.status(200).send({ message: "Relación Usuario_equipo actualizada con éxito", data: updatedUsuario_equipo });
+        }
+    } catch (err) {
+        res.status(500).send({ message: "Error al actualizar la relación Usuario_equipo", error: err });
+    }
+}
+
+async function deleteUsuario_equipo(req, res) {
+    var idUsuario_equipo = req.params.id;
+    try {
+        var deletedUsuario_equipo = await Usuario_equipo.findByIdAndDelete(idUsuario_equipo).exec();
+        if (!deletedUsuario_equipo) {
+            res.status(404).send({ message: "Usuario_equipo no encontrado" });
+        } else {
+            res.status(200).send({ message: "Usuario_equipo eliminado con éxito", data: deletedUsuario_equipo });
+        }
+    } catch (err) {
+        res.status(500).send({ message: "Error al eliminar el Usuario_equipo", error: err });
+    }
+}
+
+
 module.exports = {
     saveUsuario_equipo,
-    buscarUsuario_equipo,
-    listarAllUsuario_equipo
+    findUsuario_equipo,
+    findAllUsuario_equipo,
+    updateUsuario_equipo,
+    deleteUsuario_equipo
 }

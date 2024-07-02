@@ -11,7 +11,7 @@ async function saveTarea(req, res){
     }
 }
 
-async function buscarTarea(req, res){
+async function findTarea(req, res){
     var idTarea = req.params.id;
     try {
         var result = await Tarea.findById(idTarea).exec();
@@ -25,7 +25,7 @@ async function buscarTarea(req, res){
     }
 }
 
-async function listarAllTarea(req, res){
+async function findAllTarea(req, res){
     var idTarea = req.params.idb;
     try {
         var result;
@@ -44,8 +44,38 @@ async function listarAllTarea(req, res){
     }
 }
 
+async function updateTarea(req, res) {
+    var idTarea = req.params.id;
+    try {
+        var updatedTarea = await Tarea.findByIdAndUpdate(idTarea, req.body, { new: true }).exec();
+        if (!updatedTarea) {
+            res.status(404).send({ message: "Tarea no encontrada" });
+        } else {
+            res.status(200).send({ message: "Tarea actualizada con éxito", data: updatedTarea });
+        }
+    } catch (err) {
+        res.status(500).send({ message: "Error al actualizar la tarea", error: err });
+    }
+}
+
+async function deleteTarea(req, res) {
+    var idTarea = req.params.id;
+    try {
+        var deletedTarea = await Tarea.findByIdAndDelete(idTarea).exec();
+        if (!deletedTarea) {
+            res.status(404).send({ message: "Tarea no encontrada" });
+        } else {
+            res.status(200).send({ message: "Tarea eliminada con éxito", data: deletedTarea });
+        }
+    } catch (err) {
+        res.status(500).send({ message: "Error al eliminar la tarea", error: err });
+    }
+}
+
 module.exports = {
     saveTarea,
-    buscarTarea,
-    listarAllTarea
+    findTarea,
+    findAllTarea,
+    updateTarea,
+    deleteTarea
 }
