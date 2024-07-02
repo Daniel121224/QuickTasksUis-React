@@ -72,7 +72,6 @@ async function deleteUsuario_equipo(req, res) {
     }
 }
 
-
 module.exports = {
     saveUsuario_equipo,
     findUsuario_equipo,
