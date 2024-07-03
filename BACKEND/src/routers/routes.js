@@ -11,6 +11,7 @@ router.get('/prueba', ControllerUsuario.prueba);
 router.get('/buscarUsuario/:id', ControllerUsuario.findUsuario);
 router.get('/listarAllUsuario/:idb?', ControllerUsuario.findAllUsuario);
 router.post('/crearUsuario', ControllerUsuario.saveUsuario);
+router.post('/auth', ControllerUsuario.authUsuario); // Ruta para la autenticación
 router.put('/actualizarUsuario/:id', ControllerUsuario.updateUsuario);
 router.delete('/eliminarUsuario/:id', ControllerUsuario.deleteUsuario);
 

@@ -5,15 +5,59 @@ function prueba(req, res){
     res.status(200).send({mensaje: "Probando el controlador de usuarios"});
 }
 
-async function saveUsuario(req, res){
+const jwt = require('jsonwebtoken');
+const secretKey = 'tu_secreto'; // Cambia esto por una clave secreta más segura
+
+async function authUsuario(req, res) {
+    const { correo, contrasena } = req.body;
+
+    // Verificar si el correo existe
+    let usuario = await Usuario.findOne({ correo });
+    if (!usuario) {
+        return res.status(404).json({ message: "El usuario no existe" });
+    }
+
+    // Verificar si la contraseña tiene al menos 6 caracteres
+    if (contrasena.length < 6) {
+        return res.status(400).json({ message: "La contraseña debe tener al menos 6 caracteres" });
+    }
+
+    // Comparar la contraseña en texto claro
+    if (contrasena !== usuario.contrasena) {
+        return res.status(400).json({ message: "Contraseña incorrecta" });
+    }
+
+    // Generar un token JWT
+    const payload = {
+        id: usuario._id,
+        correo: usuario.correo,
+        nombre: usuario.nombre
+    };
+    const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
+
+    // Devolver solo el token
+    res.status(200).json({ token });
+}
+
+
+async function saveUsuario(req, res) {
     try {
+        // Verificar si el correo electrónico ya está registrado
+        const existingUser = await Usuario.findOne({ correo: req.body.correo });
+
+        if (existingUser) {
+            return res.status(400).send({ message: "El correo electrónico ya está registrado" });
+        }
+
+        // Si el correo no está registrado, guardar el usuario
         var myUsuario = new Usuario(req.body);
         var result = await myUsuario.save();
-        res.status(200).send({message: "Usuario guardado con éxito", data: result});
+        res.status(200).send({ message: "Usuario guardado con éxito", data: result });
     } catch (err) {
-        res.status(500).send({message: "Error al guardar el usuario", error: err});
+        res.status(500).send({ message: "Error al guardar el usuario", error: err });
     }
 }
+
 
 async function findUsuario(req, res){
     var idUsuario = req.params.id;
@@ -83,5 +127,6 @@ module.exports = {
     findUsuario,
     findAllUsuario,
     updateUsuario,
-    deleteUsuario
+    deleteUsuario,
+    authUsuario
 }
