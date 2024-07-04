@@ -1,8 +1,13 @@
 import React from 'react';
+import Navbar from '../componentes/Navbar';
+import SidebarContainer from '../componentes/SidebarContainer';
 
 const Home = () => {
     return (
-        <h1>Home</h1>
+        <div className="wrapper">
+            <Navbar></Navbar>
+            <SidebarContainer></SidebarContainer>
+        </div>
     );
 }
 
