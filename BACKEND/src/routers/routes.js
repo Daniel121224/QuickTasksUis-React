@@ -4,6 +4,7 @@ var ControllerEntorno = require('../controllers/ControllerEntorno');
 var ControllerEquipo = require('../controllers/ControllerEquipo');
 var ControllerTarea = require('../controllers/ControllerTarea');
 var ControllerUsuario_equipo = require('../controllers/ControllerUsuario_equipo');
+const auth = require('../middleware/auth'); // Importamos el middleware auth.js
 const router = Router();
 
 //Usuario
@@ -15,12 +16,12 @@ router.post('/auth', ControllerUsuario.authUsuario); // Ruta para la autenticaci
 router.put('/actualizarUsuario/:id', ControllerUsuario.updateUsuario);
 router.delete('/eliminarUsuario/:id', ControllerUsuario.deleteUsuario);
 
-//Entorno
-router.get('/buscarEntorno/:id', ControllerEntorno.findEntorno);
-router.get('/listarAllEntorno/:idb?', ControllerEntorno.findAllEntorno);
+// Entorno
+router.get('/buscarEntorno/:id', auth, ControllerEntorno.findEntorno);
+router.get('/listarAllEntorno/:idb?', auth, ControllerEntorno.findAllEntorno); // Protege esta ruta con el middleware auth
 router.post('/crearEntorno', ControllerEntorno.saveEntorno);
-router.put('/actualizarEntorno/:id', ControllerEntorno.updateEntorno);
-router.delete('/eliminarEntorno/:id', ControllerEntorno.deleteEntorno);
+router.put('/actualizarEntorno/:id', auth, ControllerEntorno.updateEntorno);
+router.delete('/eliminarEntorno/:id', auth, ControllerEntorno.deleteEntorno);
 
 //Equipo
 router.get('/buscarEquipo/:id', ControllerEquipo.findEquipo);

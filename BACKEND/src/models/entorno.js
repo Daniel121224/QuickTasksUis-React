@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var entornoSchema = new Schema({
     nombre_entorno: String,
     cantidad_participantes: Number,
-    id_equipo: { type: Schema.Types.ObjectId, ref: 'Equipo' }, // Referencia a la colección 'Equipo'
+    creador: { type: Schema.Types.ObjectId, ref: 'Usuario' }, // id_usuario
 });
 
 module.exports = mongoose.model('Entorno', entornoSchema);

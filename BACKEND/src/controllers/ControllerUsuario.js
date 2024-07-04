@@ -6,37 +6,43 @@ function prueba(req, res){
 }
 
 const jwt = require('jsonwebtoken');
-const secretKey = 'tu_secreto'; // Cambia esto por una clave secreta más segura
+const secretKey = 'tu_secreto'; // Deberías utilizar process.env.SECRETA para seguridad
 
 async function authUsuario(req, res) {
     const { correo, contrasena } = req.body;
 
-    // Verificar si el correo existe
-    let usuario = await Usuario.findOne({ correo });
-    if (!usuario) {
-        return res.status(404).json({ message: "El usuario no existe" });
+    try {
+        // Verificar si el correo existe
+        let usuario = await Usuario.findOne({ correo });
+        if (!usuario) {
+            return res.status(404).json({ message: "El usuario no existe" });
+        }
+
+        // Verificar si la contraseña coincide
+        if (contrasena !== usuario.contrasena) {
+            return res.status(400).json({ message: "Contraseña incorrecta" });
+        }
+
+        // Generar un token JWT
+        const payload = {
+            id: usuario._id,
+            correo: usuario.correo,
+            nombre: usuario.nombre
+        };
+
+        jwt.sign(payload, secretKey, { expiresIn: '1h' }, (err, token) => {
+            if (err) {
+                console.error('Error al firmar el token:', err);
+                res.status(500).json({ message: "Error al autenticar" });
+            } else {
+                // Devolver el token como respuesta
+                res.status(200).json({ token });
+            }
+        });
+    } catch (err) {
+        console.error('Error en autenticación:', err);
+        res.status(500).json({ message: "Error al autenticar" });
     }
-
-    // Verificar si la contraseña tiene al menos 6 caracteres
-    if (contrasena.length < 6) {
-        return res.status(400).json({ message: "La contraseña debe tener al menos 6 caracteres" });
-    }
-
-    // Comparar la contraseña en texto claro
-    if (contrasena !== usuario.contrasena) {
-        return res.status(400).json({ message: "Contraseña incorrecta" });
-    }
-
-    // Generar un token JWT
-    const payload = {
-        id: usuario._id,
-        correo: usuario.correo,
-        nombre: usuario.nombre
-    };
-    const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
-
-    // Devolver solo el token
-    res.status(200).json({ token });
 }
 
 

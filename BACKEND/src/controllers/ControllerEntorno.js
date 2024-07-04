@@ -1,5 +1,8 @@
+const jwt = require('jsonwebtoken');
+
 var mongoose = require('../conexDB/conn');
 var Entorno = require('../models/entorno');
+process.env.SECRETA='tu_secreto'
 
 async function saveEntorno(req, res){
     try {
@@ -26,23 +29,28 @@ async function findEntorno(req, res){
 }
 
 async function findAllEntorno(req, res){
-    var idEntorno = req.params.idb;
     try {
-        var result;
-        if(!idEntorno){
-            result = await Entorno.find({}).sort('nombre').exec();
-        } else {
-            result = await Entorno.find({_id: idEntorno}).sort('nombre').exec();
+        const token = req.header('x-auth-token');
+        if (!token) {
+            return res.status(401).json({ msg: 'No hay token, permiso no válido' });
         }
-        if (!result) {
-            res.status(404).send({message: "Entornos no encontrados"});
-        } else {
-            res.status(200).send({result});
+
+        const decoded = jwt.verify(token, process.env.SECRETA);
+        req.usuario = decoded.usuario;
+
+        const result = await Entorno.find({}).sort('nombre').exec();
+        
+        if (!result || result.length === 0) {
+            return res.status(404).send({ message: "Entornos no encontrados" });
         }
+        
+        res.status(200).send({ result });
     } catch (err) {
-        res.status(500).send({message: "Error en la petición", error: err});
+        console.error("Error en findAllEntorno:", err); // Agrega este console.error para ver el detalle del error en la consola
+        res.status(500).send({ message: "Error en la petición", error: err });
     }
 }
+
 
 async function updateEntorno(req, res) {
     var idEntorno = req.params.id;
