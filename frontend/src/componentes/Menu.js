@@ -1,25 +1,25 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Menu = () => {
     return (
         <nav className="mt-2">
             <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                
                 <li className="nav-item">
-                    <a href="../widgets.html" className="nav-link">
+                    <Link to={"/home"} className="nav-link">
                         <i className="nav-icon fas fa-th" />
                         <p>
-                            Widgets
+                            Inicio
                         </p>
-                    </a>
+                    </Link>
                 </li>
                 <li className="nav-item">
-                    <a href="../widgets.html" className="nav-link">
-                        <i className="nav-icon fas fa-th" />
+                    <Link to={"/entornos-admin"} className="nav-link">
+                        <i className="nav-icon fas fa-edit" />
                         <p>
-                            Widgets
+                            Entornos
                         </p>
-                    </a>
+                    </Link>
                 </li>
 
             </ul>

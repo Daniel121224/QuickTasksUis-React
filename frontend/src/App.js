@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import CrearCuenta from './paginas/auth/CrearCuenta';
 import Login from './paginas/auth/Login';
 import Home from './paginas/Home';
+import EntornosAdmin from './paginas/entornos/EntornosAdmin';
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" exact element={<Login/>}/>
           <Route path="/crear-cuenta" exact element={<CrearCuenta/>}/>
           <Route path="/home" exact element={<Home/>}/>
+          <Route path="/entornos-admin" exact element={<EntornosAdmin/>}/>
         </Routes>
       </Router>
     </Fragment>
