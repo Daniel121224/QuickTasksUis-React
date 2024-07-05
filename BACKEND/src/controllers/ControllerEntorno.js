@@ -1,16 +1,25 @@
 const jwt = require('jsonwebtoken');
-
 var mongoose = require('../conexDB/conn');
 var Entorno = require('../models/entorno');
 process.env.SECRETA='tu_secreto'
 
-async function saveEntorno(req, res){
+async function saveEntorno(req, res) {
     try {
+        const token = req.header('x-auth-token');
+        if (!token) {
+            return res.status(401).json({ msg: 'No hay token, permiso no válido' });
+        }
+
+        const decoded = jwt.verify(token, process.env.SECRETA);
+        req.usuario = decoded;
+
         var myEntorno = new Entorno(req.body);
+        myEntorno.creador = req.usuario.id; // Asignamos el id del usuario al campo creador
+
         var result = await myEntorno.save();
-        res.status(200).send({message: "Entorno guardado con éxito", data: result});
+        res.status(200).send({ message: "Entorno guardado con éxito", data: result });
     } catch (err) {
-        res.status(500).send({message: "Error al guardar el Entorno", error: err});
+        res.status(500).send({ message: "Error al guardar el Entorno", error: err });
     }
 }
 

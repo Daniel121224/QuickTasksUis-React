@@ -5,6 +5,7 @@ var tareaSchema = new Schema({
     nombre_tarea: String,
     descripcion_tarea: String,
     clasificacion_tarea: String,
+    estado: { type: Boolean, default: false },
     entorno: { type: Schema.Types.ObjectId, ref: 'Entorno' } // Referencia a la colección 'Entorno'
 });
 

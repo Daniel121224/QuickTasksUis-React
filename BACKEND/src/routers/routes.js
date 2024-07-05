@@ -19,7 +19,7 @@ router.delete('/eliminarUsuario/:id', ControllerUsuario.deleteUsuario);
 // Entorno
 router.get('/buscarEntorno/:id', auth, ControllerEntorno.findEntorno);
 router.get('/listarAllEntorno/:idb?', auth, ControllerEntorno.findAllEntorno); // Protege esta ruta con el middleware auth
-router.post('/crearEntorno', ControllerEntorno.saveEntorno);
+router.post('/crearEntorno', auth, ControllerEntorno.saveEntorno);
 router.put('/actualizarEntorno/:id', auth, ControllerEntorno.updateEntorno);
 router.delete('/eliminarEntorno/:id', auth, ControllerEntorno.deleteEntorno);
 
@@ -31,11 +31,11 @@ router.put('/actualizarEquipo/:id', ControllerEquipo.updateEquipo);
 router.delete('/eliminarEquipo/:id', ControllerEquipo.deleteEquipo);
 
 //Tarea
-router.get('/buscarTarea/:id', ControllerTarea.findTarea);
-router.get('/listarAllTarea/:idb?', ControllerTarea.findAllTarea);
-router.post('/crearTarea', ControllerTarea.saveTarea);
-router.put('/actualizarTarea/:id', ControllerTarea.updateTarea);
-router.delete('/eliminarTarea/:id', ControllerTarea.deleteTarea);
+router.get('/buscarTarea/:id', auth, ControllerTarea.findTarea);
+router.get('/listarAllTarea', auth, ControllerTarea.findAllTarea);
+router.post('/crearTarea', auth, ControllerTarea.saveTarea);
+router.put('/actualizarTarea/:id', auth, ControllerTarea.updateTarea);
+router.delete('/eliminarTarea/:id', auth, ControllerTarea.deleteTarea);
 
 //Usuario_equipo
 router.get('/buscarUsuario_equipo/:id', ControllerUsuario_equipo.findUsuario_equipo);

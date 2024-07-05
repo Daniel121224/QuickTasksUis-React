@@ -5,6 +5,7 @@ import Footer from '../../componentes/Footer';
 import ContentHeader from '../../componentes/ContentHeader';
 import { Link } from 'react-router-dom';
 import APIInvoke from '../../utils/APIInvoke';
+import swal from 'sweetalert';
 
 const EntornosAdmin = () => {
 
@@ -19,6 +20,46 @@ const EntornosAdmin = () => {
     useEffect(() => {
         cargarEntornos();
     }, []);
+
+    const eliminarEntorno = async (e, idEntorno) => {
+        e.preventDefault();
+        const response = await APIInvoke.invokeDELETE(`/eliminarEntorno/${idEntorno}`);
+
+        if (response.message === "Entorno eliminado con éxito") {
+            const message = 'El entorno fue eliminado con éxito';
+                swal({
+                    title: 'Información',
+                    text: message,
+                    icon: 'success',
+                    buttons: {
+                        confirm: {
+                            text: 'Aceptar',
+                            value: true,
+                            visible: true,
+                            className: 'btn btn-success',
+                            closeModal: true
+                        }
+                    }
+                });
+                cargarEntornos();
+        } else {
+            const message = 'No fue posible eliminar el entorno';
+                swal({
+                    title: 'Error',
+                    text: message,
+                    icon: 'error',
+                    buttons: {
+                        confirm: {
+                            text: 'Aceptar',
+                            value: true,
+                            visible: true,
+                            className: 'btn btn-danger',
+                            closeModal: true
+                        }
+                    }
+                });
+        }
+    }
 
     return (
         <div className="wrapper">
@@ -36,7 +77,7 @@ const EntornosAdmin = () => {
                 <section className="content">
                     <div className="card">
                         <div className="card-header">
-                            <h3 className="card-title">Title</h3>
+                            <h3 className="card-title"><Link to={"/entornos-crear"} className="btn btn-block btn-primary btn-sm">Agregar Entorno</Link></h3>
                             <div className="card-tools">
                                 <button type="button" className="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                     <i className="fas fa-minus" />
@@ -51,9 +92,9 @@ const EntornosAdmin = () => {
                                 <thead>
                                     <tr>
                                         <th style={{ width: '10%' }}>Id</th>
-                                        <th style={{ width: '60%' }}>Nombre</th>
-                                        <th style={{ width: '15%' }}>No. miembros</th>
-                                        <th style={{ width: '15%' }}>Opciones</th>
+                                        <th style={{ width: '55%' }}>Nombre</th>
+                                        <th style={{ width: '10%' }}>No. miembros</th>
+                                        <th style={{ width: '25%' }}>Opciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -66,8 +107,9 @@ const EntornosAdmin = () => {
                                                     <td>{item.nombre_entorno}</td>
                                                     <td>{item.cantidad_participantes}</td>
                                                     <td>
-                                                        <button className="btn btn-primary btn-primary">Editar</button>&nbsp; &nbsp;
-                                                        <button className="btn btn-primary btn-danger">Borrar</button>
+                                                        <Link to={`/tareas-admin/${item._id}@${item.nombre_entorno}`} className="btn btn-primary btn-info">Tareas</Link>&nbsp; &nbsp;
+                                                        <Link to={`/entornos-editar/${item._id}@${item.nombre_entorno}@${item.cantidad_participantes}`} className="btn btn-primary btn-primary">Editar</Link>&nbsp; &nbsp;
+                                                        <button  onClick={(e)=> eliminarEntorno(e, item._id)} className="btn btn-primary btn-danger">Borrar</button>
                                                     </td>
                                                 </tr>
                                         )
