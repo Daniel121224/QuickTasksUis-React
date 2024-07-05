@@ -1,41 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import ContentHeader from '../../componentes/ContentHeader';
-import Footer from '../../componentes/Footer';
 import Navbar from '../../componentes/Navbar';
 import SidebarContainer from '../../componentes/SidebarContainer';
+import Footer from '../../componentes/Footer';
+import ContentHeader from '../../componentes/ContentHeader';
+import { Link } from 'react-router-dom';
 import APIInvoke from '../../utils/APIInvoke';
 import swal from 'sweetalert';
-import { useParams } from 'react-router-dom';
 import fondoVerde from '../../assets/fondoverde.jpg';
 
-const TareasAdmin = () => {
+const EquiposAdmin = () => {
 
-    const [tareas, setTareas] = useState([]);
+    const [equipos, setEquipo] = useState([]);
 
-    const { identorno } = useParams();
-    let arreglo = identorno.split('@');
-    const idEntorno = arreglo[0];
-    const nombreEntorno = arreglo[1];
-    const cantidadParticipantes = arreglo[2];
-    const tituloPagina = `Tareas del Entorno: ${nombreEntorno}`;
-
-    const cargarTareas = async () => {
-        const response = await APIInvoke.invokeGET(`/listarAllTarea?entorno=${idEntorno}`);
-        //console.log(response.tareas);
-        setTareas(response.tareas);
+    const cargarEquipos = async () => {
+        const response = await APIInvoke.invokeGET('/listarAllEquipo');
+        //console.log(response.result);
+        setEquipo(response.result);
     }
 
     useEffect(() => {
-        cargarTareas();
+        cargarEquipos();
     }, []);
 
-    const eliminarTarea = async (e, idTarea, idEntorno) => {
+    const eliminarEquipo = async (e, idEquipo) => {
         e.preventDefault();
-        const response = await APIInvoke.invokeDELETE(`/eliminarTarea/${idTarea}?entorno=${idEntorno}`);
+        const response = await APIInvoke.invokeDELETE(`/eliminarEquipo/${idEquipo}`);
 
-        if (response.message === "Tarea eliminada con éxito") {
-            const message = 'La tarea fue eliminada con éxito';
+        if (response.message === "Equipo eliminado con éxito") {
+            const message = 'El Equipo fue eliminado con éxito';
             swal({
                 title: 'Información',
                 text: message,
@@ -50,9 +42,9 @@ const TareasAdmin = () => {
                     }
                 }
             });
-            cargarTareas();
+            cargarEquipos();
         } else {
-            const message = 'No fue posible eliminar la tarea';
+            const message = 'No fue posible eliminar el Equipo';
             swal({
                 title: 'Error',
                 text: message,
@@ -77,16 +69,16 @@ const TareasAdmin = () => {
             <div className="content-wrapper" style={{ backgroundImage: `url(${fondoVerde})`, backgroundSize: 'cover' }}>
 
                 <ContentHeader
-                    titulo={tituloPagina}
-                    breadCrumb1={"Lista de Entornos"}
-                    breadCrumb2={"Tareas"}
-                    ruta1={"/entornos-admin"}
+                    titulo={"Lista de Equipos de Trabajo"}
+                    breadCrumb1={"Inicio"}
+                    breadCrumb2={"Equipos"}
+                    ruta1={"/home"}
                 />
 
                 <section className="content">
                     <div className="card">
                         <div className="card-header">
-                            <h3 className="card-title"><Link to={`/tareas-crear/${identorno}`} className="btn btn-block btn-primary btn-sm">Agregar Tarea</Link></h3>
+                            <h3 className="card-title"><Link to={"/equipos-crear"} className="btn btn-block btn-primary btn-sm">Agregar Equipo</Link></h3>
                             <div className="card-tools">
                                 <button type="button" className="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                     <i className="fas fa-minus" />
@@ -101,29 +93,29 @@ const TareasAdmin = () => {
                                 <thead>
                                     <tr>
                                         <th style={{ width: '10%' }}>Id</th>
-                                        <th style={{ width: '20%' }}>Nombre</th>
-                                        <th style={{ width: '20%' }}>Clasificación</th>
-                                        <th style={{ width: '30%' }}>Descripción</th>
-                                        <th style={{ width: '20%' }}>Opciones</th>
+                                        <th style={{ width: '25%' }}>Nombre</th>
+                                        <th style={{ width: '30%' }}>Integrantes</th>
+                                        <th style={{ width: '10%' }}>Metodologia</th>
+                                        <th style={{ width: '25%' }}>Opciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-
                                     {
-                                        tareas.map(
+                                        equipos.map(
                                             item =>
                                                 <tr key={item._id}>
                                                     <td>{item._id}</td>
-                                                    <td>{item.nombre_tarea}</td>
-                                                    <td>{item.clasificacion_tarea}</td>
-                                                    <td>{item.descripcion_tarea}</td>
+                                                    <td>{item.nombre_equipo}</td>
+                                                    <td>{item.integrantes}</td>
+                                                    <td>{item.metodologia}</td>
                                                     <td>
-                                                        <Link to={`/tareas-editar/${item._id}@${item.nombre_tarea}@${item.clasificacion_tarea}@${item.descripcion_tarea}@${item.entorno}@${nombreEntorno}`} className="btn btn-primary btn-primary">Editar</Link>&nbsp; &nbsp;
-                                                        <button onClick={(e) => eliminarTarea(e, item._id, item.entorno)} className="btn btn-primary btn-danger">Borrar</button>
+                                                    <button className="btn btn-primary btn-primary">Editar</button> &nbsp; &nbsp; 
+                                                        <button className="btn btn-primary btn-danger">Borrar</button>
                                                     </td>
                                                 </tr>
                                         )
                                     }
+
 
                                 </tbody>
                             </table>
@@ -138,4 +130,4 @@ const TareasAdmin = () => {
     );
 }
 
-export default TareasAdmin;
+export default EquiposAdmin;

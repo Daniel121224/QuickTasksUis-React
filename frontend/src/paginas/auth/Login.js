@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import APIInvoke from '../../utils/APIInvoke';
 import swal from 'sweetalert';
+import logo from '../../assets/logo2.png'; // Asegúrate de que la ruta al logo sea correcta
+import './Login.css'; // Importa tu archivo CSS
 
 const Login = () => {
 
@@ -90,11 +92,14 @@ const Login = () => {
         <div className="hold-transition login-page">
             <div className="login-box">
                 <div className="login-logo">
-                    <Link to={"#"}><b>QuickTasks</b>UIS</Link>
+                    <Link to={"#"}><b>Iniciar </b>Sesión</Link>
                 </div>
                 <div className="card">
                     <div className="card-body login-card-body">
-                        <p className="login-box-msg">Bienvenido, Inicie sesión</p>
+                        <div className="text-center mb-2">
+                            <img src={logo} alt="Logo" style={{ width: '200px', height: 'auto'}} />
+                        </div>
+                        <p className="login-box-msg">Bienvenido, digite sus credenciales:</p>
                         <form onSubmit={onSubmit}>
                             <div className="input-group mb-3">
                                 <input type="email"

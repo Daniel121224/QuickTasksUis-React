@@ -6,6 +6,7 @@ import ContentHeader from '../../componentes/ContentHeader';
 import { Link } from 'react-router-dom';
 import APIInvoke from '../../utils/APIInvoke';
 import swal from 'sweetalert';
+import fondoVerde from '../../assets/fondoverde.jpg';
 
 const EntornosAdmin = () => {
 
@@ -65,7 +66,7 @@ const EntornosAdmin = () => {
         <div className="wrapper">
             <Navbar></Navbar>
             <SidebarContainer></SidebarContainer>
-            <div className="content-wrapper">
+            <div className="content-wrapper" style={{ backgroundImage: `url(${fondoVerde})`, backgroundSize: 'cover' }}>
 
                 <ContentHeader
                     titulo={"Lista de Entornos o Asignaturas"}
