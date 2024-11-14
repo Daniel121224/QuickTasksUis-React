@@ -15,6 +15,7 @@
   "author": "Daniel Robles, Juan Ortiz",
   "license": "MIT",
   "dependencies": {
+    "backend": "file:",
     "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.20.2",
     "connect-multiparty": "^2.2.0",

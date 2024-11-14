@@ -23,7 +23,7 @@ const Acerca = () => {
                 <section className="content">
                     <div className="card">
                     <div className="card-header text-center">
-                            <img src={Logo2} alt="Logo" style={{ width: '200px', marginBottom: '20px' }} />
+                            <img src={Logo2} alt="Logo" style={{ width: '50px'}} />
                             <h4 className="card-title">Logotipo</h4>
                         </div>
                         <div className="card-body">
